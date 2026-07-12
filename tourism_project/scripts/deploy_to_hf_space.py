@@ -48,7 +48,8 @@ def deploy_to_hf_space():
             print(f"Warning: {MLRUNS_DIR} not found. Model artifacts will be missing.")
 
         print(f"Creating/checking Hugging Face Space repo: {HF_SPACE_REPO}")
-        create_repo(repo_id=HF_SPACE_REPO, repo_type="space", token=HF_TOKEN, exist_ok=True)
+        # ADDED space_sdk='docker' parameter
+        create_repo(repo_id=HF_SPACE_REPO, repo_type="space", token=HF_TOKEN, exist_ok=True, space_sdk='docker')
 
         print(f"Uploading content of {temp_deploy_dir} to {HF_SPACE_REPO}")
         upload_folder(
