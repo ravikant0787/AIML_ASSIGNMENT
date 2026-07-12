@@ -111,11 +111,12 @@ jobs:
           fail-on-cache-miss: true # Data must be present for model training
       - name: Model Training and MLflow Logging
         env:
-          # Explicitly set temporary directories to avoid PermissionError on /content
           TMPDIR: ${{ github.workspace }}/tmp
           TEMP: ${{ github.workspace }}/tmp
+          MLFLOW_TMP_DIR: ${{ github.workspace }}/tmp/mlflow_temp # Explicitly set MLflow's temporary directory
         run: |
-          mkdir -p ${{ github.workspace }}/tmp # Ensure the temp directory exists
+          # The directories for temporary files and run artifacts are now created within the Python script
+          # to ensure proper path resolution within the script's context.
           python tourism_project/scripts/model_training.py
 
   deploy-hosting:
