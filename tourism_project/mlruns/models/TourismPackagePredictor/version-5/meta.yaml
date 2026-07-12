@@ -1,0 +1,16 @@
+creation_timestamp: 1783838265526
+current_stage: None
+deployment_job_state: null
+description: null
+last_updated_timestamp: 1783838265526
+model_id: m-f008067abe03466a913b3bf52ea49167
+name: TourismPackagePredictor
+run_id: ba65c226886d4a8fafdac09daa5352d9
+run_link: null
+source: models:/m-f008067abe03466a913b3bf52ea49167
+status: READY
+status_message: null
+storage_location: file:///content/tourism_project/mlruns/978378312096627754/models/m-f008067abe03466a913b3bf52ea49167/artifacts
+user_id: null
+version: 5
+workspace: default

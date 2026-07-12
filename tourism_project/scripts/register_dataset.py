@@ -10,7 +10,7 @@ DATA_FILE_PATH = 'tourism_project/data/tourism.csv'
 
 # Define your Hugging Face username and the dataset repo name
 # IMPORTANT: Replace 'your-hf-username' with your actual Hugging Face username
-HF_USERNAME = 'your-hf-username'
+HF_USERNAME = 'PRavikant'
 HF_DATASET_REPO = f'{HF_USERNAME}/tourism-dataset'
 
 def register_dataset_on_hf():

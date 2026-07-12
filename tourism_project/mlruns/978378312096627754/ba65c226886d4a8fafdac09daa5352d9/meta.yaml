@@ -1,0 +1,14 @@
+artifact_uri: file:///content/tourism_project/mlruns/978378312096627754/ba65c226886d4a8fafdac09daa5352d9/artifacts
+end_time: 1783838265674
+entry_point_name: ''
+experiment_id: '978378312096627754'
+lifecycle_stage: active
+run_id: ba65c226886d4a8fafdac09daa5352d9
+run_name: crawling-dove-602
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1783838250486
+status: 3
+tags: []
+user_id: root

@@ -14,7 +14,7 @@ MLRUNS_DIR = 'tourism_project/mlruns'
 # Define your Hugging Face username and the Space repo name
 # IMPORTANT: Replace 'your-hf-username' with your actual Hugging Face username
 HF_USERNAME = 'PRavikant'
-HF_SPACE_REPO = f'{PRavikant}/tourism-prediction-space'
+HF_SPACE_REPO = f'{HF_USERNAME}/tourism-prediction-space'
 
 def deploy_to_hf_space():
     if not HF_TOKEN:
@@ -34,6 +34,16 @@ def deploy_to_hf_space():
         # Copy the entire mlruns directory
         if os.path.exists(MLRUNS_DIR):
             shutil.copytree(MLRUNS_DIR, os.path.join(temp_deploy_dir, 'mlruns'), dirs_exist_ok=True)
+            print(f"Copied {MLRUNS_DIR} to {os.path.join(temp_deploy_dir, 'mlruns')}")
+            # Add logging to inspect the copied mlruns directory
+            print(f"Contents of {os.path.join(temp_deploy_dir, 'mlruns')}:")
+            for root, dirs, files in os.walk(os.path.join(temp_deploy_dir, 'mlruns')):
+                level = root.replace(os.path.join(temp_deploy_dir, 'mlruns'), '').count(os.sep)
+                indent = ' ' * 4 * (level) # Adjust indent based on directory depth
+                print(f"{indent}{os.path.basename(root)}/")
+                subindent = ' ' * 4 * (level + 1)
+                for f in files:
+                    print(f"{subindent}{f}")
         else:
             print(f"Warning: {MLRUNS_DIR} not found. Model artifacts will be missing.")
 
