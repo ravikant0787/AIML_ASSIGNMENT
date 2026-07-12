@@ -13,8 +13,8 @@ MLRUNS_DIR = 'tourism_project/mlruns'
 
 # Define your Hugging Face username and the Space repo name
 # IMPORTANT: Replace 'your-hf-username' with your actual Hugging Face username
-HF_USERNAME = 'your-hf-username'
-HF_SPACE_REPO = f'{HF_USERNAME}/tourism-prediction-space'
+HF_USERNAME = 'PRavikant'
+HF_SPACE_REPO = f'{PRavikant}/tourism-prediction-space'
 
 def deploy_to_hf_space():
     if not HF_TOKEN:
