@@ -21,14 +21,24 @@ def train_model():
     print(f"Loading data for model training from {DATA_FILE_PATH}...")
     df = pd.read_csv(DATA_FILE_PATH)
 
-    # Create the directory for MLflow artifacts if it doesn't exist
-    os.makedirs("tourism_project/mlruns", exist_ok=True)
+    # Debugging: Print current working directory and relevant environment variables
+    print(f"Current working directory: {os.getcwd()}")
+    print(f"MLFLOW_TRACKING_URI env var: {os.environ.get('MLFLOW_TRACKING_URI')}")
+    print(f"TMPDIR env var: {os.environ.get('TMPDIR')}")
+    print(f"TEMP env var: {os.environ.get('TEMP')}")
+    print(f"PYTHON_TEMP_DIR env var: {os.environ.get('PYTHON_TEMP_DIR')}")
+
+    # Explicitly define the local MLflow artifact store path relative to the current working directory
+    mlruns_local_path = os.path.join(os.getcwd(), "tourism_project", "mlruns")
+    print(f"MLflow will attempt to create/use tracking URI at: {mlruns_local_path}")
+    os.makedirs(mlruns_local_path, exist_ok=True) # Ensure this local path is created
 
     # Set environment variable to allow MLflow filesystem tracking
     os.environ['MLFLOW_ALLOW_FILE_STORE'] = 'true'
 
-    # Set MLflow tracking URI to a local directory for now
-    mlflow.set_tracking_uri("file:./tourism_project/mlruns")
+    # Set MLflow tracking URI to the explicitly defined local directory
+    mlflow.set_tracking_uri(f"file:{mlruns_local_path}")
+    print(f"MLflow tracking URI explicitly set to: {mlflow.get_tracking_uri()}")
     mlflow.set_experiment("tourism_package_prediction")
 
     # Define target and features
