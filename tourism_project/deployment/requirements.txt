@@ -1,0 +1,6 @@
+pandas
+scikit-learn
+mlflow
+numpy
+flask
+gunicorn # For production-ready web server

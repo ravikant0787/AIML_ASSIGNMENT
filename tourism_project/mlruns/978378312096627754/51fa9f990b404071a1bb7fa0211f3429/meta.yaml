@@ -1,0 +1,14 @@
+artifact_uri: file:///content/tourism_project/mlruns/978378312096627754/51fa9f990b404071a1bb7fa0211f3429/artifacts
+end_time: 1783834291760
+entry_point_name: ''
+experiment_id: '978378312096627754'
+lifecycle_stage: active
+run_id: 51fa9f990b404071a1bb7fa0211f3429
+run_name: gaudy-penguin-7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1783834279469
+status: 3
+tags: []
+user_id: root

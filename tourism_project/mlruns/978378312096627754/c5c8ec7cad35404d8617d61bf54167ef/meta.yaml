@@ -1,0 +1,14 @@
+artifact_uri: file:///content/tourism_project/mlruns/978378312096627754/c5c8ec7cad35404d8617d61bf54167ef/artifacts
+end_time: 1783834006051
+entry_point_name: ''
+experiment_id: '978378312096627754'
+lifecycle_stage: active
+run_id: c5c8ec7cad35404d8617d61bf54167ef
+run_name: treasured-crane-876
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1783833991154
+status: 3
+tags: []
+user_id: root
