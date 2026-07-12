@@ -1,0 +1,132 @@
+
+name: Tourism Project MLOps Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Automatically triggers on push to the main branch
+  workflow_dispatch: {}
+
+jobs:
+
+  register-dataset:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install Dependencies
+        run: |
+          pip install pandas huggingface_hub
+      - name: Make data directory (if not exists)
+        run: |
+          mkdir -p tourism_project/data
+      - name: Restore dataset from cache or copy from workspace if available
+        uses: actions/cache/restore@v4
+        id: restore-dataset-cache
+        with:
+          path: tourism_project/data/tourism.csv
+          key: ${{ runner.os }}-tourism-data
+          fail-on-cache-miss: false
+      - name: Check if dataset exists after restore
+        id: check-dataset-restore
+        run: |
+          if [ -f tourism_project/data/tourism.csv ]; then
+            echo "dataset_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "dataset_exists=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Copy dataset to expected location if not restored
+        if: steps.check-dataset-restore.outputs.dataset_exists == 'false'
+        run: |
+          # In a real scenario, you'd fetch tourism.csv here or ensure it's in the repo.
+          # For this Colab-based example, we assume `tourism_project/data/tourism.csv`
+          # is either in the checked-out repository or will be manually placed.
+          # If running in a pipeline where it's not present, this step might fail initially.
+          # If the file is expected to be part of the git repo, no explicit copy is needed here.
+          echo "tourism.csv should be committed to tourism_project/data/ for pipeline to work without manual intervention."
+          # Dummy touch for demonstration if the file isn't in git and cache missed
+          # touch tourism_project/data/tourism.csv
+          # exit 1 # Uncomment if you want to fail if the file is truly missing
+      - name: Upload Dataset to Hugging Face Hub
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          python tourism_project/scripts/register_dataset.py
+      - name: Save dataset to cache
+        uses: actions/cache/save@v4
+        with:
+          path: tourism_project/data/tourism.csv
+          key: ${{ runner.os }}-tourism-data
+
+  data-prep:
+    needs: register-dataset
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install Dependencies
+        run: |
+          pip install pandas
+      - name: Make data directory (if not exists)
+        run: |
+          mkdir -p tourism_project/data
+      - name: Restore dataset from cache
+        uses: actions/cache/restore@v4
+        id: restore-dataset
+        with:
+          path: tourism_project/data/tourism.csv
+          key: ${{ runner.os }}-tourism-data
+          fail-on-cache-miss: true # Data must be present for data-prep
+      - name: Run Data Preparation
+        run: |
+          python tourism_project/scripts/data_preparation.py
+
+  model-training:
+    needs: data-prep
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install Dependencies
+        run: |
+          pip install scikit-learn mlflow numpy pandas
+      - name: Make data directory (if not exists)
+        run: |
+          mkdir -p tourism_project/data
+      - name: Restore dataset from cache
+        uses: actions/cache/restore@v4
+        id: restore-dataset-for-training
+        with:
+          path: tourism_project/data/tourism.csv
+          key: ${{ runner.os }}-tourism-data
+          fail-on-cache-miss: true # Data must be present for model training
+      - name: Model Training and MLflow Logging
+        run: |
+          python tourism_project/scripts/model_training.py
+
+  deploy-hosting:
+    runs-on: ubuntu-latest
+    needs: [model-training]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install Dependencies
+        run: |
+          pip install huggingface_hub
+      - name: Push files to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          python tourism_project/scripts/deploy_to_hf_space.py
