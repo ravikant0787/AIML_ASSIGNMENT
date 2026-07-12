@@ -110,7 +110,12 @@ jobs:
           key: ${{ runner.os }}-tourism-data
           fail-on-cache-miss: true # Data must be present for model training
       - name: Model Training and MLflow Logging
+        env:
+          # Explicitly set temporary directories to avoid PermissionError on /content
+          TMPDIR: ${{ github.workspace }}/tmp
+          TEMP: ${{ github.workspace }}/tmp
         run: |
+          mkdir -p ${{ github.workspace }}/tmp # Ensure the temp directory exists
           python tourism_project/scripts/model_training.py
 
   deploy-hosting:
